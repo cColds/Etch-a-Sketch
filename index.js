@@ -3,7 +3,7 @@ let col = document.createElement("div");
 const createDiv = () => document.createElement("div");
 let userInput = 16;
 let gridSize = userInput * userInput;
-let userColor = "blue";
+let userColor = "black";
 // const slider = document.getElementById("myRange");
 // let sliderValue = document.querySelector(".sliderValue");
 
@@ -44,18 +44,12 @@ squares.forEach((square) => {
 });
 
 const clearAll = document.querySelector(".clear");
-let clearMode = clearAll;
+
 clearAll.addEventListener("click", () => {
-	if (clearAll == clearMode) squares.style.backgroundColor = "transparent";
+	squares.forEach((square) => {
+		square.style.backgroundColor = "transparent";
+	});
 });
-
-// const clearAll = document.querySelector(".clear");
-
-// clearAll.forEach((item) => {
-// 	clearAll.addEventListener("click", () => {
-// 		clearAll.style.backgroundColor = "white";
-// 	});
-// });
 
 const erase = document.querySelector(".eraser");
 erase.addEventListener("click", () => {
@@ -69,4 +63,30 @@ let colorSelected = document.getElementById("colorPicker");
 
 colorSelected.addEventListener("change", () => {
 	userColor = colorSelected.value;
+});
+
+let colorButton = document.querySelector(".colorMode");
+
+colorButton.addEventListener("click", () => {
+	squares.forEach((square) => {
+		square.addEventListener("mouseover", () => {
+			square.style.backgroundColor = userColor;
+		});
+	});
+});
+
+const randomBetween = (min, max) =>
+	min + Math.floor(Math.random() * (max - min + 1));
+const r = randomBetween(0, 255);
+const g = randomBetween(0, 255);
+const b = randomBetween(0, 255);
+const rgb = `rgb(${r},${g},${b})`;
+
+let rainbowMode = document.querySelector(".rainbow");
+rainbowMode.addEventListener("click", () => {
+	squares.forEach((square) => {
+		square.addEventListener("mouseover", () => {
+			square.style.backgroundColor = userColor;
+		});
+	});
 });
