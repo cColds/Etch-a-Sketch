@@ -1,20 +1,26 @@
 const gridContainer = document.querySelector(".grid-container");
 let col = document.createElement("div");
 const createDiv = () => document.createElement("div");
-let userInput = 16;
-let gridSize = userInput * userInput;
+
 let userColor = "black";
 let mode = "Color";
-// const slider = document.getElementById("myRange");
-// let sliderValue = document.querySelector(".sliderValue");
+const slider = document.getElementById("myRange");
+let sliderValue = document.querySelector(".sliderValue");
+const wrap = document.querySelector(".grid-wrap");
+sliderValue.textContent = `${slider.value} x ${slider.value}`;
+let userInput = slider.value;
 
-// 	sliderValue.textContent = slider.value;
+let gridSize = userInput * userInput;
+slider.oninput = function () {
+	sliderValue.textContent = `${slider.value} x ${slider.value}`;
 
-// slider.oninput = function () {
+	userInput = slider.value;
+	gridSize = userInput * userInput;
+	clearGrid();
+	createGrid();
 
-// 	sliderValue.textContent = this.value;
-
-// };
+	console.log(userInput);
+};
 
 function createGrid() {
 	for (let i = 0; i < gridSize; i++) {
@@ -25,6 +31,9 @@ function createGrid() {
 			"box-sizing: border-box; outline: solid black 1px;"
 		);
 
+		gridDiv.style.width = calculateWidthAndHeight();
+		console.log((gridDiv.style.width = calculateWidthAndHeight()));
+		gridDiv.style.height = calculateWidthAndHeight();
 		gridDiv.classList.add("square");
 		col.appendChild(gridDiv);
 		if (col.childElementCount == userInput) {
@@ -35,6 +44,14 @@ function createGrid() {
 	}
 }
 createGrid();
+
+function clearGrid() {
+	gridContainer.textContent = "";
+}
+
+function calculateWidthAndHeight() {
+	return `${500 / slider.value}px`;
+}
 
 const squares = document.querySelectorAll(".square");
 
@@ -68,7 +85,6 @@ function randomRGBColor() {
 
 const random255 = () => Math.floor(Math.random() * 255);
 
-let rainbowColor = userColor;
 let rainbowMode = document.querySelector(".rainbow");
 rainbowMode.addEventListener("click", () => {
 	mode = "Rainbow";

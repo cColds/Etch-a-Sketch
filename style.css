@@ -24,10 +24,7 @@ body {
 .col {
 	display: flex;
 }
-.square {
-	width: 31.25px;
-	height: 31.25px;
-}
+
 .grid-container {
 	display: flex;
 	flex-wrap: wrap;
