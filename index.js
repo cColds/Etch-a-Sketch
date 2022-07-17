@@ -1,7 +1,7 @@
 const gridContainer = document.querySelector(".grid-container");
 let col = document.createElement("div");
 const createDiv = () => document.createElement("div");
-
+let dataValue = 0.1;
 let userColor = "black";
 let mode = "Color";
 const slider = document.getElementById("myRange");
@@ -11,16 +11,17 @@ sliderValue.textContent = `${slider.value} x ${slider.value}`;
 let userInput = slider.value;
 
 let gridSize = userInput * userInput;
-slider.oninput = function () {
+slider.addEventListener("input", () => {
 	sliderValue.textContent = `${slider.value} x ${slider.value}`;
 
 	userInput = slider.value;
 	gridSize = userInput * userInput;
 	clearGrid();
 	createGrid();
-
+	squares = document.querySelectorAll(".square");
+	squareListener();
 	console.log(userInput);
-};
+});
 
 function createGrid() {
 	for (let i = 0; i < gridSize; i++) {
@@ -30,9 +31,11 @@ function createGrid() {
 
 			"box-sizing: border-box; outline: solid black 1px;"
 		);
+		gridDiv.setAttribute("id", "greyScaleValue");
+		gridDiv.dataset.greyScaleValue = 0.1;
 
 		gridDiv.style.width = calculateWidthAndHeight();
-		console.log((gridDiv.style.width = calculateWidthAndHeight()));
+
 		gridDiv.style.height = calculateWidthAndHeight();
 		gridDiv.classList.add("square");
 		col.appendChild(gridDiv);
@@ -46,24 +49,27 @@ function createGrid() {
 createGrid();
 
 function clearGrid() {
-	gridContainer.textContent = "";
+	return (gridContainer.textContent = "");
 }
 
 function calculateWidthAndHeight() {
 	return `${500 / slider.value}px`;
 }
 
-const squares = document.querySelectorAll(".square");
+let squares = document.querySelectorAll(".square");
 
-squares.forEach((square) => {
-	square.addEventListener("mouseover", () => {
-		console.log({ mode });
-		if (mode == "Color") userColorPicked = colorSelected.value;
-		if (mode == "Rainbow") userColorPicked = randomRGBColor();
-		if (mode == "Erase") userColorPicked = "transparent";
-		square.style.backgroundColor = userColorPicked;
+function squareListener() {
+	squares.forEach((square) => {
+		square.addEventListener("mouseover", () => {
+			if (mode == "Color") userColorPicked = colorSelected.value;
+			if (mode == "Rainbow") userColorPicked = randomRGBColor();
+			if (mode == "Erase") userColorPicked = "transparent";
+			if (mode == "Greyscale") userColorPicked = greyScale();
+			square.style.backgroundColor = userColorPicked;
+		});
 	});
-});
+}
+squareListener();
 
 let colorSelected = document.getElementById("colorPicker");
 let userColorPicked = userColor;
@@ -88,6 +94,27 @@ const random255 = () => Math.floor(Math.random() * 255);
 let rainbowMode = document.querySelector(".rainbow");
 rainbowMode.addEventListener("click", () => {
 	mode = "Rainbow";
+});
+
+function greyScale() {
+	if (dataValue >= 1) {
+		dataValue = 0.1;
+		greyScaleValue = 0.1;
+	}
+
+	let colors = `rgb(0,0,0,${dataValue})`;
+
+	dataValue += 0.1;
+	greyScaleValue += +0.1;
+	console.log(greyScaleValue);
+	console.log(dataValue);
+	return colors;
+}
+
+let greyScaleMode = document.querySelector(".greyscale");
+
+greyScaleMode.addEventListener("click", () => {
+	mode = "Greyscale";
 });
 
 const erase = document.querySelector(".eraser");
