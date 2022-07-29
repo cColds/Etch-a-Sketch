@@ -2,47 +2,34 @@
 <html lang="en">
 
     <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>cold</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
         <script src="index.js" defer></script>
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
-        <h1 class="title">Etch-a-Sketch</h1>
-        <div class="testing">
-            <div class="selection">
-                <label for="colorPicker"><input type="color" id="colorPicker" value=#000000></label>
-
-                <button class="colorMode">Color Mode</button>
-                <button class="rainbow">Rainbow Mode</button>
-                <button class="greyscale">Greyscale</button>
-                <button class="eraser">Eraser</button>
-                <button class="clear">Clear</button>
-                <div class="slider">
-                    <input type="range" min="1" max="100" value="16" class="slider" id="myRange">
-                    <p>Scroll grid from 1 up to 100</p>
-
-                    <p class="sliderValue"></p>
-                </div>
-                <!-- <button class="buttonValue">Click to choose value</button> -->
-
-            </div>
-
-
-
-
-
-
-            <div class='grid-wrap'>
-                <div class="grid-container"></div>
-            </div>
+        <h1>Etch-A-Sketch</h1>
+        <div class="gridContainer">
+            <div class="gridBorder"></div>
         </div>
+        <div class="modeContainer">
+            <div>
+                <input type="color" class="colorPicker" value="#000000" />
+            </div>
+            <button class="color">Color Mode</button>
+            <button class="rainbow">Rainbow Mode</button>
+            <button class="greyscale">Greyscale Mode</button>
+            <button class="eraser">Eraser</button>
+            <button class="clear">Clear</button>
+        </div>
+
+        <div class="sliderContainer">
+            <input type="range" min="1" max="100" value="16" class="slider" id="myRange" />
+        </div>
+        <div class="sliderText">Grid Size: 16 x 16</div>
     </body>
 
 </html>

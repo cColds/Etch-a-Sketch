@@ -1,129 +1,156 @@
-const gridContainer = document.querySelector(".grid-container");
-let col = document.createElement("div");
-const createDiv = () => document.createElement("div");
-let dataValue = 0.1;
-let userColor = "black";
-let mode = "Color";
-const slider = document.getElementById("myRange");
-let sliderValue = document.querySelector(".sliderValue");
-const wrap = document.querySelector(".grid-wrap");
-sliderValue.textContent = `${slider.value} x ${slider.value}`;
-let userInput = slider.value;
+const gridContainer = document.querySelector(".gridContainer");
+const gridBorder = document.querySelector(".gridBorder");
+let slider = document.querySelector(".slider");
+let sliderText = document.querySelector(".sliderText");
 
-let gridSize = userInput * userInput;
+let squareDiv = Number(slider.value);
+let squareMultiply = squareDiv ** 2;
+const squaresRemove = document.querySelectorAll(".squares");
+
+function removeGrid() {
+	return (gridBorder.textContent = "");
+}
+
+function changeGrid() {
+	removeGrid();
+	squareDiv = Number(slider.value);
+	squareMultiply = squareDiv ** 2;
+
+	gridLoop();
+
+	squareFunction();
+}
 slider.addEventListener("input", () => {
-	sliderValue.textContent = `${slider.value} x ${slider.value}`;
-
-	userInput = slider.value;
-	gridSize = userInput * userInput;
-	clearGrid();
-	createGrid();
-	squares = document.querySelectorAll(".square");
-	squareListener();
-	console.log(userInput);
+	sliderText.textContent = `Grid Size: ${slider.value} x ${slider.value}`;
 });
+slider.addEventListener("change", changeGrid);
 
-function createGrid() {
-	for (let i = 0; i < gridSize; i++) {
-		const gridDiv = document.createElement("div");
-		gridDiv.setAttribute(
-			"style",
+function gridLoop() {
+	for (let i = 0; i < squareMultiply; i++) {
+		const div = document.createElement("div");
 
-			"box-sizing: border-box; outline: solid black 1px;"
-		);
-		gridDiv.setAttribute("id", "greyScaleValue");
-		gridDiv.dataset.greyScaleValue = 0.1;
+		div.style.outline = "1px solid black";
+		div.style.width = `${widthHeight()}px`;
+		div.style.height = `${widthHeight()}px`;
+		div.classList.add("squares");
 
-		gridDiv.style.width = calculateWidthAndHeight();
-
-		gridDiv.style.height = calculateWidthAndHeight();
-		gridDiv.classList.add("square");
-		col.appendChild(gridDiv);
-		if (col.childElementCount == userInput) {
-			col.classList.add("col");
-			gridContainer.appendChild(col);
-			col = createDiv();
-		}
+		gridBorder.appendChild(div);
+		gridContainer.appendChild(gridBorder);
 	}
 }
-createGrid();
-
-function clearGrid() {
-	return (gridContainer.textContent = "");
+gridLoop();
+// calculate width and height
+function widthHeight() {
+	return 500 / squareDiv;
 }
 
-function calculateWidthAndHeight() {
-	return `${500 / slider.value}px`;
-}
+// selecting buttons
+const color = document.querySelector(".color");
+const rainbow = document.querySelector(".rainbow");
+const greyscale = document.querySelector(".greyscale");
+const eraser = document.querySelector(".eraser");
+const clear = document.querySelector(".clear");
+const colorPicker = document.querySelector(".colorPicker");
+// default mode and color
+let userMode = color;
+let colorValue = "#000000";
 
-let squares = document.querySelectorAll(".square");
+color.style.border = "solid white 3px";
+rainbow.style.border = "solid white 3px";
+greyscale.style.border = "solid white 3px";
+eraser.style.border = "solid white 3px";
+clear.style.border = "solid white 3px";
+color.style.background = "black";
+userMode.style.color = "white";
+let greyscaleValue = 0.1;
 
-function squareListener() {
+// setup event listeners for hover and mode
+function squareFunction() {
+	let squares = document.querySelectorAll(".squares");
 	squares.forEach((square) => {
 		square.addEventListener("mouseover", () => {
-			if (mode == "Color") userColorPicked = colorSelected.value;
-			if (mode == "Rainbow") userColorPicked = randomRGBColor();
-			if (mode == "Erase") userColorPicked = "transparent";
-			if (mode == "Greyscale") userColorPicked = greyScale();
-			square.style.backgroundColor = userColorPicked;
+			if (userMode == color) square.style.background = colorPicker.value;
+			if (userMode == rainbow) square.style.background = rainbowColor();
+
+			if (userMode == greyscale) {
+				if (square.dataset.opacity == undefined) {
+					square.dataset.opacity = 0;
+				}
+				if (square.dataset.opacity >= 0) {
+					square.dataset.opacity =
+						Number(square.dataset.opacity) + 0.1;
+
+					console.log(Number(square.dataset.opacity));
+					square.style.background = `rgb(${0},${0},${0},${
+						square.dataset.opacity
+					}`;
+					console.log(Number(square.dataset.opacity));
+				}
+			}
+
+			if (userMode == eraser) square.style.background = "transparent";
+
+			clear.addEventListener("click", () => {
+				square.style.backgroundColor = "transparent";
+			});
 		});
 	});
 }
-squareListener();
+squareFunction();
 
-let colorSelected = document.getElementById("colorPicker");
-let userColorPicked = userColor;
+colorPicker.addEventListener("change", () => {
+	userMode.style.background = "";
+	userMode.style.color = "black";
+	userMode = color;
 
-colorSelected.addEventListener("change", () => {
-	userColorPicked = colorSelected.value;
+	console.log(colorValue);
+	color.style.background = "black";
+	color.style.color = "white";
 });
 
-let colorButton = document.querySelector(".colorMode");
+// color picker and color mode
 
-colorButton.addEventListener("click", () => (mode = "Color"));
+color.addEventListener("click", () => {
+	userMode.style.background = "";
+	userMode.style.color = "black";
 
-function randomRGBColor() {
-	let r = random255();
-	let g = random255();
-	let b = random255();
-	return `rgb(${r},${g},${b})`;
+	userMode = color;
+	color.style.background = "black";
+	color.style.color = "white";
+});
+
+rainbow.addEventListener("click", () => {
+	userMode.style.background = "";
+	userMode.style.color = "black";
+	userMode = rainbow;
+	rainbow.style.background = "black";
+	rainbow.style.color = "white";
+});
+
+// rainbow mode and rainbow function
+
+function random(number) {
+	return Math.floor(Math.random() * number);
+}
+function rainbowColor() {
+	return `rgb(${random(255)},${random(255)},${random(255)})`;
 }
 
-const random255 = () => Math.floor(Math.random() * 255);
-
-let rainbowMode = document.querySelector(".rainbow");
-rainbowMode.addEventListener("click", () => {
-	mode = "Rainbow";
+// greyscale
+greyscale.addEventListener("click", () => {
+	userMode.style.background = "";
+	userMode.style.color = "black";
+	userMode = greyscale;
+	greyscale.style.background = "black";
+	greyscale.style.color = "white";
 });
 
-function greyScale() {
-	if (dataValue >= 1) {
-		dataValue = 0.1;
-		greyScaleValue = 0.1;
-	}
+// eraser mode
 
-	let colors = `rgb(0,0,0,${dataValue})`;
-
-	dataValue += 0.1;
-	greyScaleValue += +0.1;
-	console.log(greyScaleValue);
-	console.log(dataValue);
-	return colors;
-}
-
-let greyScaleMode = document.querySelector(".greyscale");
-
-greyScaleMode.addEventListener("click", () => {
-	mode = "Greyscale";
-});
-
-const erase = document.querySelector(".eraser");
-erase.addEventListener("click", () => (mode = "Erase"));
-
-const clearAll = document.querySelector(".clear");
-
-clearAll.addEventListener("click", () => {
-	squares.forEach((square) => {
-		square.style.backgroundColor = "transparent";
-	});
+eraser.addEventListener("click", () => {
+	userMode.style.background = "";
+	userMode.style.color = "black";
+	userMode = eraser;
+	eraser.style.background = "black";
+	eraser.style.color = "white";
 });
